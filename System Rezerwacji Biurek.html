@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<!-- saved from url=(0152)https://ppl-ai-code-interpreter-files.s3.amazonaws.com/web/direct-files/a06770b5befb114f41a20e8acbe4cc03/5d8b2a03-bada-48cc-938d-158dbcfcfcbe/index.html -->
+<html lang="pl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Rezerwacji Biurek</title>
+    <link rel="stylesheet" href="./System Rezerwacji Biurek_files/style.css">
+</head>
+<body>
+    <div class="container">
+        <header class="py-16">
+            <h1>System Rezerwacji Biurek</h1>
+            <p class="mt-8">Zarezerwuj swoje miejsce pracy w biurze lub zgłoś pracę zdalną</p>
+        </header>
+
+        <!-- Formularz rezerwacji -->
+        <section class="card mb-8">
+            <div class="card__header">
+                <h2>Nowa Rezerwacja</h2>
+            </div>
+            <div class="card__body">
+                <form id="reservation-form" class="flex flex-col gap-16">
+                    <div class="form-group">
+                        <label for="date" class="form-label">Data:</label>
+                        <input type="date" id="date" name="date" class="form-control" required="">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tryb pracy:</label>
+                        <div class="flex flex-col gap-8">
+                            <label class="radio-label">
+                                <input type="radio" name="work-mode" value="office" id="office-mode" checked="">
+                                <span class="radio-custom"></span>
+                                W biurze
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="work-mode" value="remote" id="remote-mode">
+                                <span class="radio-custom"></span>
+                                Zdalnie
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="shift-group">
+                        <label class="form-label">Zmiana:</label>
+                        <div class="flex flex-col gap-8">
+                            <label class="radio-label">
+                                <input type="radio" name="shift" value="poranna" id="morning-shift" checked="">
+                                <span class="radio-custom"></span>
+                                Poranna (8:00-10:00)
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="shift" value="popoludniowa" id="afternoon-shift">
+                                <span class="radio-custom"></span>
+                                Popołudniowa (10:00-14:00)
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="employee-name" class="form-label">Imię i nazwisko:</label>
+                        <input type="text" id="employee-name" name="employee-name" class="form-control" required="" placeholder="Wpisz swoje imię i nazwisko">
+                    </div>
+
+                    <div class="flex gap-8">
+                        <button type="submit" class="btn btn--primary">Zarezerwuj</button>
+                        <button type="button" id="cancel-reservation" class="btn btn--secondary">Anuluj Rezerwację</button>
+                    </div>
+                </form>
+
+                <div id="form-message" class="mt-8 hidden"></div>
+            </div>
+        </section>
+
+        <!-- Podgląd rezerwacji -->
+        <section class="card mb-8">
+            <div class="card__header flex justify-between items-center">
+                <h2>Rezerwacje</h2>
+                <div class="flex gap-8 items-center">
+                    <label for="view-date" class="form-label m-0">Pokaż rezerwacje na:</label>
+                    <input type="date" id="view-date" class="form-control" style="width: auto;">
+                    <button id="refresh-data" class="btn btn--outline btn--sm">Odśwież</button>
+                    <button id="export-csv" class="btn btn--outline btn--sm">Eksportuj CSV</button>
+                </div>
+            </div>
+            <div class="card__body">
+                <!-- Statystyki dostępności -->
+                <div class="availability-stats mb-8">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h4>Zmiana Poranna</h4>
+                            <p class="stat-number" id="morning-availability">3/5</p>
+                            <span class="stat-label">dostępnych miejsc</span>
+                        </div>
+                        <div class="stat-card">
+                            <h4>Zmiana Popołudniowa</h4>
+                            <p class="stat-number" id="afternoon-availability">7/8</p>
+                            <span class="stat-label">dostępnych miejsc</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela rezerwacji -->
+                <div class="table-container">
+                    <table class="reservations-table">
+                        <thead>
+                            <tr>
+                                <th>Imię i Nazwisko</th>
+                                <th>Tryb Pracy</th>
+                                <th>Zmiana</th>
+                                <th>Czas Rezerwacji</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservations-tbody">
+            <tr>
+                <td>Jan Kowalski</td>
+                <td><span class="work-mode-badge work-mode-badge--office">W biurze</span></td>
+                <td><span class="shift-badge">Poranna (8:00-10:00)</span></td>
+                <td>3.06.2025, 12:30:00</td>
+            </tr>
+        
+            <tr>
+                <td>Anna Nowak</td>
+                <td><span class="work-mode-badge work-mode-badge--office">W biurze</span></td>
+                <td><span class="shift-badge">Poranna (8:00-10:00)</span></td>
+                <td>3.06.2025, 13:15:00</td>
+            </tr>
+        
+            <tr>
+                <td>Piotr Wiśniewski</td>
+                <td><span class="work-mode-badge work-mode-badge--office">W biurze</span></td>
+                <td><span class="shift-badge">Popołudniowa (10:00-14:00)</span></td>
+                <td>3.06.2025, 14:00:00</td>
+            </tr>
+        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instrukcje wdrożenia -->
+        <section class="card">
+            <div class="card__header">
+                <h2>Instrukcje Wdrożenia</h2>
+            </div>
+            <div class="card__body">
+                <div class="instructions">
+                    <h3>Konfiguracja Pliku JSON</h3>
+                    <p>Aby aplikacja działała z rzeczywistym plikiem JSON, wykonaj następujące kroki:</p>
+                    
+                    <h4>1. Hosting Pliku JSON</h4>
+                    <ul>
+                        <li><strong>GitHub:</strong> Utwórz repozytorium i wgraj plik data.json, użyj linku raw do pliku</li>
+                        <li><strong>JSONBin.io:</strong> Bezpłatny hosting dla plików JSON z API</li>
+                        <li><strong>Google Drive:</strong> Udostępnij plik publicznie i użyj Google Drive API</li>
+                        <li><strong>Serwer firmowy:</strong> Umieść plik na serwerze HTTP z odpowiednimi nagłówkami CORS</li>
+                    </ul>
+
+                    <h4>2. Modyfikacja Kodu</h4>
+                    <p>W pliku <code>app.js</code> znajdź linię:</p>
+                    <pre><code>const JSON_URL = 'http://localhost/data.json';</code></pre>
+                    <p>I zamień na URL do swojego pliku JSON.</p>
+
+                    <h4>3. Struktura Pliku JSON</h4>
+                    <p>Plik data.json powinien zawierać strukturę jak poniżej:</p>
+                    <pre><code>{
+  "rezerwacje": {
+    "2025-06-04": {
+      "poranna": [
+        {"id": 1, "imie": "Jan Kowalski", "timestamp": "2025-06-03T10:30:00Z"}
+      ],
+      "popoludniowa": []
+    }
+  },
+  "lastUpdated": "2025-06-03T12:30:00Z",
+  "limity": {
+    "poranna": 5,
+    "popoludniowa": 8
+  }
+}</code></pre>
+
+                    <h4>4. Rozwiązywanie Problemów CORS</h4>
+                    <ul>
+                        <li>Upewnij się, że serwer zwraca odpowiednie nagłówki CORS</li>
+                        <li>Dla testów lokalnych użyj rozszerzenia przeglądarki wyłączającego CORS</li>
+                        <li>Rozważ proxy serwer dla API zewnętrznych</li>
+                    </ul>
+
+                    <div class="status status--info mt-8">
+                        <strong>Uwaga:</strong> Obecnie aplikacja używa localStorage do symulacji. Po wdrożeniu pliku JSON, dane będą synchronizowane między wszystkimi użytkownikami.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script src="./System Rezerwacji Biurek_files/app.js.download"></script>
+
+</body></html>
